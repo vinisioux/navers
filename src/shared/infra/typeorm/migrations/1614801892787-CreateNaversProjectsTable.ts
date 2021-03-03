@@ -1,10 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateNaversTable1614799630229 implements MigrationInterface {
+export class CreateNaversProjectsTable1614801892787
+  implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'navers',
+        name: 'navers_projects',
         columns: [
           {
             name: 'id',
@@ -13,23 +14,11 @@ export class CreateNaversTable1614799630229 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'name',
-            type: 'varchar',
+            name: 'naver_id',
+            type: 'SERIAL',
           },
           {
-            name: 'birthdate',
-            type: 'date',
-          },
-          {
-            name: 'admission_date',
-            type: 'date',
-          },
-          {
-            name: 'job_role',
-            type: 'varchar',
-          },
-          {
-            name: 'created_by_id',
+            name: 'project_id',
             type: 'SERIAL',
           },
           {
@@ -45,10 +34,18 @@ export class CreateNaversTable1614799630229 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: 'FK_user_naver',
-            referencedTableName: 'users',
+            name: 'FK_navers_projects',
+            referencedTableName: 'navers',
             referencedColumnNames: ['id'],
-            columnNames: ['created_by_id'],
+            columnNames: ['naver_id'],
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE',
+          },
+          {
+            name: 'FK_projects_navers',
+            referencedTableName: 'projects',
+            referencedColumnNames: ['id'],
+            columnNames: ['project_id'],
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE',
           },
@@ -58,6 +55,6 @@ export class CreateNaversTable1614799630229 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('navers');
+    await queryRunner.dropTable('navers_projects');
   }
 }

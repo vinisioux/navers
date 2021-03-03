@@ -2,17 +2,15 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateUsersTable1614798034848 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.createTable(
       new Table({
         name: 'users',
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'SERIAL',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
+            generationStrategy: 'increment',
           },
           {
             name: 'email',

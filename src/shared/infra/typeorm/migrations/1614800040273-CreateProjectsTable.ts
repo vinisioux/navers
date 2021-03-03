@@ -8,14 +8,17 @@ export class CreateProjectsTable1614800040273 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'SERIAL',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
+            generationStrategy: 'increment',
           },
           {
             name: 'name',
             type: 'varchar',
+          },
+          {
+            name: 'created_by_id',
+            type: 'SERIAL',
           },
           {
             name: 'created_at',
@@ -26,6 +29,16 @@ export class CreateProjectsTable1614800040273 implements MigrationInterface {
             name: 'updated_at',
             type: 'timestamp with time zone',
             default: 'now()',
+          },
+        ],
+        foreignKeys: [
+          {
+            name: 'FK_user_project',
+            referencedTableName: 'users',
+            referencedColumnNames: ['id'],
+            columnNames: ['created_by_id'],
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE',
           },
         ],
       })
