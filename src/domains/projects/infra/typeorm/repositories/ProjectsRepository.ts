@@ -32,14 +32,14 @@ export class ProjectsRepository implements IProjectsRepository {
         n.name,
         n.birthdate,
         n.admission_date,
-        n.job_role 
-      from 
+        n.job_role
+      from
         projects p,
         navers n,
         navers_projects np
-      where n.id = np.naver_id 
+      where n.id = np.naver_id
       and   p.id = np.project_id
-      and	  p.id = ${id};      
+      and	  p.id = ${id};
     `)) as Naver[];
 
     return {
@@ -84,7 +84,7 @@ export class ProjectsRepository implements IProjectsRepository {
     project.name = data.name;
     project.navers = data.navers;
 
-    this.ormRepository.save(project);
+    await this.ormRepository.save(project);
 
     return project;
   }

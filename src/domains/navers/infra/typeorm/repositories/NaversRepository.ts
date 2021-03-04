@@ -80,7 +80,7 @@ export class NaversRepository implements INaversRepository {
     naver.job_role = data.job_role;
     naver.projects = data.projects;
 
-    this.ormRepository.save(naver);
+    await this.ormRepository.save(naver);
 
     return naver;
   }

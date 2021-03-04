@@ -1,4 +1,3 @@
-import { AppError } from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import {
   IProjectsRepository,
@@ -20,10 +19,6 @@ export class GetOneProjectService {
     project_id,
   }: IRequest): Promise<IFindByIdProjectResponse> {
     const project = await this.projectsRepository.findById(project_id);
-
-    if (!project) {
-      throw new AppError('Project not found');
-    }
 
     return project;
   }
