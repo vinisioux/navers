@@ -22,7 +22,7 @@ Neste projeto utilizei as seguintes tecnologias
 
 Para rodar este projeto, você ira precisar ter o [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/), [Yarn](https://yarnpkg.com/) e o [Postgresql](https://www.postgresql.org/) instalado em seu computador.
 
-Antes de rodar o projeto, você ira ter que criar um banco de dados no Postgresql com nome "**navers**", e para rodar os testes, precisa ter um banco de dados com nome "**navers_tests**"
+Antes de rodar o projeto, você ira ter que criar um banco de dados no Postgresql com nome "**navers**", e para rodar os testes, precisa ter um banco de dados com nome "**navers_tests**". E susbstitua os campos (username, password) do arquivo "**ormconfig.js**" de acordo com o seu banco de dados.
 
 Na linha de comando execute:
 
