@@ -24,6 +24,8 @@ Para rodar este projeto, você ira precisar ter o [Git](https://git-scm.com), [N
 
 Antes de rodar o projeto, você ira ter que criar um banco de dados no Postgresql com nome "**navers**", e para rodar os testes, precisa ter um banco de dados com nome "**navers_tests**". E susbstitua os campos (username, password) do arquivo "**ormconfig.js**" de acordo com o seu banco de dados.
 
+Na raiz do arquivo tem o arquivo **Insomnia_2021-03-04.json**, da pra importar no Insomnia para executar as requisições.
+
 Na linha de comando execute:
 
 ```bash
