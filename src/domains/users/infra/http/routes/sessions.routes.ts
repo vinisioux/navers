@@ -5,4 +5,4 @@ import { SessionsController } from '@domains/users/infra/http/controllers/Sessio
 export const sessionsRouter = Router();
 const sessionsController = new SessionsController();
 
-sessionsRouter.post('/', sessionsController.create);
+sessionsRouter.post('/', sessionsController.store);

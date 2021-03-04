@@ -1,10 +1,16 @@
+import { AppError } from '@shared/errors/AppError';
 import { getRepository, Repository } from 'typeorm';
 
-import { INaversRepository } from '@domains/navers/repositories/INaversRepository';
+import {
+  IFindByIdNaverResponse,
+  INaversRepository,
+} from '@domains/navers/repositories/INaversRepository';
 import { ICreateNaverDTO } from '@domains/navers/dtos/ICreateNaverDTO';
 import { IUpdateNaverDTO } from '@domains/navers/dtos/IUpdateNaverDTO';
+import { IDeleteNaverDTO } from '@domains/navers/dtos/IDeleteNaverDTO';
 
 import { Naver } from '@domains/navers/infra/typeorm/entities/Naver';
+import { Project } from '@domains/projects/infra/typeorm/entities/Project';
 
 export class NaversRepository implements INaversRepository {
   private ormRepository: Repository<Naver>;
@@ -13,10 +19,30 @@ export class NaversRepository implements INaversRepository {
     this.ormRepository = getRepository(Naver);
   }
 
-  public async findById(id: number): Promise<Naver | undefined> {
+  public async findById(id: number): Promise<IFindByIdNaverResponse> {
     const naver = await this.ormRepository.findOne(id);
 
-    return naver;
+    if (!naver) {
+      throw new AppError('Naver not found.');
+    }
+
+    const projectsInNaver = (await this.ormRepository.query(`
+      select
+        p.id,
+        p.name 
+      from
+        projects p,
+        navers n,
+        navers_projects np
+      where n.id = np.naver_id
+      and   p.id = np.project_id
+      and   n.id = ${id};
+    `)) as Project[];
+
+    return {
+      naver,
+      projects: projectsInNaver,
+    };
   }
 
   public async findAll(): Promise<Naver[]> {
@@ -37,18 +63,22 @@ export class NaversRepository implements INaversRepository {
     return this.ormRepository.save(naver);
   }
 
-  public async update(userData: IUpdateNaverDTO): Promise<Naver | undefined> {
-    const naver = await this.ormRepository.findOne(userData.id);
+  public async update(data: IUpdateNaverDTO): Promise<Naver> {
+    const naver = await this.ormRepository.findOne(data.id);
 
     if (!naver) {
-      return undefined;
+      throw new AppError('Naver not found.');
     }
 
-    naver.name = userData.name;
-    naver.admission_date = userData.admission_date;
-    naver.birthdate = userData.birthdate;
-    naver.job_role = userData.job_role;
-    naver.projects = userData.projects;
+    if (naver.created_by_id !== data.created_by_id) {
+      throw new AppError('You cannot update this Naver.');
+    }
+
+    naver.name = data.name;
+    naver.admission_date = data.admission_date;
+    naver.birthdate = data.birthdate;
+    naver.job_role = data.job_role;
+    naver.projects = data.projects;
 
     this.ormRepository.save(naver);
 
@@ -59,5 +89,19 @@ export class NaversRepository implements INaversRepository {
     const navers = await this.ormRepository.findByIds(ids);
 
     return navers;
+  }
+
+  public async delete(data: IDeleteNaverDTO): Promise<void> {
+    const naver = await this.ormRepository.findOne(data.id);
+
+    if (!naver) {
+      throw new AppError('Naver not found.');
+    }
+
+    if (naver.created_by_id !== data.created_by_id) {
+      throw new AppError('You cannot delete this Naver.');
+    }
+
+    await this.ormRepository.remove(naver);
   }
 }

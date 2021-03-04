@@ -7,6 +7,10 @@ const naversRouter = Router();
 
 const naversController = new NaversController();
 
-naversRouter.post('/', ensureAuthenticated, naversController.create);
+naversRouter.post('/', ensureAuthenticated, naversController.store);
+naversRouter.get('/', ensureAuthenticated, naversController.index);
+naversRouter.get('/:naver_id', ensureAuthenticated, naversController.show);
+naversRouter.put('/:naver_id', ensureAuthenticated, naversController.update);
+naversRouter.delete('/:naver_id', ensureAuthenticated, naversController.delete);
 
 export { naversRouter };

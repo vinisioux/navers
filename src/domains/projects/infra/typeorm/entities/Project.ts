@@ -13,6 +13,8 @@ import {
 import { User } from '@domains/users/infra/typeorm/entities/User';
 import { Naver } from '@domains/navers/infra/typeorm/entities/Naver';
 
+import { Exclude } from 'class-transformer';
+
 @Entity('projects')
 export class Project {
   @PrimaryGeneratedColumn('increment')
@@ -21,6 +23,7 @@ export class Project {
   @Column()
   name: string;
 
+  @Exclude()
   @Column()
   created_by_id: number;
 
@@ -28,9 +31,11 @@ export class Project {
   @JoinColumn({ name: 'created_by_id' })
   created_by: User;
 
+  @Exclude()
   @CreateDateColumn()
   created_at: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updated_at: Date;
 

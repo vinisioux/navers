@@ -1,4 +1,3 @@
-// import { AppError } from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import { INaversRepository } from '@domains/navers/repositories/INaversRepository';
 import { IProjectsRepository } from '@domains/projects/repositories/IProjectsRepository';
@@ -6,6 +5,7 @@ import { IProjectsRepository } from '@domains/projects/repositories/IProjectsRep
 import { Naver } from '@domains/navers/infra/typeorm/entities/Naver';
 
 interface IRequest {
+  naver_id: number;
   name: string;
   birthdate: string;
   admission_date: string;
@@ -15,7 +15,7 @@ interface IRequest {
 }
 
 @injectable()
-export class CreateNaverService {
+export class UpdateNaverService {
   constructor(
     @inject('NaversRepository')
     private naversRepository: INaversRepository,
@@ -25,23 +25,25 @@ export class CreateNaverService {
   ) {}
 
   public async execute({
-    name,
     admission_date,
     birthdate,
-    job_role,
-    projects,
     created_by_id,
+    job_role,
+    name,
+    projects,
+    naver_id,
   }: IRequest): Promise<Naver> {
     const projectsEntities = await this.projectsRepository.findProjectsByIds(
       projects
     );
 
-    const naver = await this.naversRepository.create({
+    const naver = await this.naversRepository.update({
       admission_date,
       birthdate,
       job_role,
       name,
       projects: projectsEntities,
+      id: naver_id,
       created_by_id,
     });
 

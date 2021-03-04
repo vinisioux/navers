@@ -7,4 +7,5 @@ export interface IUpdateNaverDTO {
   admission_date: string;
   job_role: string;
   projects: Project[];
+  created_by_id: number;
 }
